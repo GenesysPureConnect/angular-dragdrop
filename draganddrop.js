@@ -21,7 +21,8 @@
             var isDragHandleUsed = false,
                 dragHandleClass,
                 draggingClass = attrs.draggingClass || 'on-dragging',
-                dragTarget;
+                dragTarget,
+                dragData = "";
 
             element.attr('draggable', false);
 
@@ -58,7 +59,7 @@
                     if (attrs.onDropSuccess) {
                         var onDropSuccessFn = $parse(attrs.onDropSuccess);
                         scope.$evalAsync(function() {
-                            onDropSuccessFn(scope, {$event: e});
+                            onDropSuccessFn(scope, {$event: e, $data: dragData});
                         });
                     } else {
                         if (attrs.onDropFailure) {
@@ -77,7 +78,6 @@
 
                 if (isDragAllowed) {
                     var sendChannel = attrs.dragChannel || 'defaultchannel';
-                    var dragData = '';
                     if (attrs.drag) {
                         dragData = scope.$eval(attrs.drag);
                     }
@@ -108,7 +108,7 @@
                         });
                     }
 
-                    var transferDataObject = {data: dragData, channel: sendChannel}
+                    var transferDataObject = {data: dragData, channel: sendChannel};
                     var transferDataText = angular.toJson(transferDataObject);
 
                     e.dataTransfer.setData('text', transferDataText);
