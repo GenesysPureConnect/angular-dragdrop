@@ -266,6 +266,12 @@
                 }
 
                 if (valid) {
+                    // Hacks for IE to get the valid icon for cursor.
+                    e.dataTransfer.effectAllowed = 'copyMove';
+                    if (e.dataTransfer.dropEffect === 'none') {
+                        e.dataTransfer.dropEffect = e.ctrlKey ? 'copy' : 'move';
+                    }
+
                     element.bind('dragover', onDragOver);
                     element.bind('dragenter', onDragEnter);
                     element.bind('dragleave', onDragLeave);
@@ -273,6 +279,11 @@
 
                     element.addClass(dragEnterClass);
                 } else {
+                    // Hacks for IE to get the invalid icon for cursor.
+                    if (e.dataTransfer.dropEffect === 'none') {
+                        e.dataTransfer.effectAllowed = 'none';
+                    }
+
                     element.bind('dragover', preventNativeDnD);
                     element.bind('dragenter', preventNativeDnD);
                     element.bind('dragleave', preventNativeDnD);
